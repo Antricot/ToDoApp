@@ -9,11 +9,11 @@ form.addEventListener('submit', (e) => {
   if (input.value === '') {
     return;
   }
-  let id = Math.random() * 1000000;
+  let id = Math.ceil(Math.random() * 1000000);
   const todo = new Todo(id, input.value);
   todoArr = [...todoArr, todo];
-  renderDOM.displayData();
-  renderDOM.clearInput();
+  displayData();
+  clearInput();
 });
 
 class Todo {
@@ -23,27 +23,23 @@ class Todo {
   }
 }
 
-class renderDOM {
-  static displayData() {
-    let displayData = todoArr.map((item) => {
-      return `
-      <div class="todo">
+function displayData() {
+  todoArr.map((item) => {
+    const todoToAdd = `
+      <div class="todo" id=${item.id}>
       <p>${item.todo}</p>
-      <button class='remove'>Delete</button>
+      <button class='remove' id=btn${item.id}>Delete</button>
       </div>
   `;
+    lists.innerHTML += todoToAdd;
+
+    const deleteBtn = document.querySelector(`#btn${item.id}`);
+    deleteBtn.addEventListener('click', (e) => {
+      return console.log('work');
     });
-    lists.innerHTML = displayData.join(' ');
-  }
-  static clearInput() {
-    input.value = '';
-  }
-  static removeBtn() {
-    const deleteBtn = document.querySelector('.remove');
-    deleteBtn.forEach((button) => {
-      button.addEventListener('click', (e) => {
-        return console.log('work');
-      });
-    });
-  }
+  });
+}
+
+function clearInput() {
+  input.value = '';
 }
