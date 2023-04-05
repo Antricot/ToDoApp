@@ -35,6 +35,7 @@ function displayData() {
 
     const deleteBtn = document.querySelector(`#btn${item.id}`);
     deleteBtn.addEventListener('click', (e) => {
+      //Todo: delete item from todoArr
       return console.log('work');
     });
   });
