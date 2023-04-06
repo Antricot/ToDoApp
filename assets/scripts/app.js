@@ -27,35 +27,19 @@ class Todo {
 function displayData() {
   lists.innerHTML = '';
   todoArr.map((item) => {
-    const aux = document.createElement('div');
-    aux.id = item.id;
-    aux.addEventListener('click', (e) => {
+    const containerTodo = document.createElement('div');
+    containerTodo.id = item.id;
+    containerTodo.innerHTML = ` <p>${item.todo}</p> `;
+    const btnDel = document.createElement('button');
+    btnDel.innerText = 'Delete';
+    btnDel.addEventListener('click', (e) => {
       e.preventDefault();
       todoArr = todoArr.filter((todo) => todo.id !== item.id);
       let todoDelete = document.getElementById(item.id);
       todoDelete.remove();
     });
-
-    aux.innerHTML = ` <p>${item.todo}</p>
-      <button class='remove' id=btn${item.id}>Delete</button>`;
-
-    lists.appendChild(aux);
-
-    //   const todoToAdd = `
-    //     <div class="todo" id=${item.id}>
-    //     <p>${item.todo}</p>
-    //     <button class='remove' id=btn${item.id}>Delete</button>
-    //     </div>
-    // `;
-    //   lists.innerHTML += todoToAdd;
-    //   const deleteBtn = document.querySelector(`#btn${item.id}`);
-
-    //   deleteBtn.addEventListener('click', (e) => {
-    //     e.preventDefault();
-    //     todoArr = todoArr.filter((todo) => todo.id !== item.id);
-    //     let todoDelete = document.getElementById(item.id);
-    //     todoDelete.remove();
-    //   });
+    containerTodo.appendChild(btnDel);
+    lists.appendChild(containerTodo);
   });
 }
 
