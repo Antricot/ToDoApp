@@ -28,9 +28,13 @@ function displayData() {
   lists.innerHTML = '';
   todoArr.map((item) => {
     const containerTodo = document.createElement('div');
+    const todoText = document.createElement('p');
+    todoText.innerText = item.todo;
     containerTodo.id = item.id;
-    containerTodo.innerHTML = ` <p>${item.todo}</p> `;
+    containerTodo.appendChild(todoText);
     const btnDel = document.createElement('button');
+    const btnMod = document.createElement('button');
+    btnMod.innerText = 'Modify';
     btnDel.innerText = 'Delete';
     btnDel.addEventListener('click', (e) => {
       e.preventDefault();
@@ -38,7 +42,19 @@ function displayData() {
       let todoDelete = document.getElementById(item.id);
       todoDelete.remove();
     });
+    btnMod.addEventListener('click', (e) => {
+      let aux = document.createElement('input');
+      aux.value = todoText.innerText;
+      aux.addEventListener('keypress', (e) => {
+        if (e.key !== 'Enter') return;
+        let pula = document.createElement('p');
+        pula.innerText = aux.value;
+        aux.replaceWith(pula);
+      });
+      todoText.replaceWith(aux);
+    });
     containerTodo.appendChild(btnDel);
+    containerTodo.appendChild(btnMod);
     lists.appendChild(containerTodo);
   });
 }
