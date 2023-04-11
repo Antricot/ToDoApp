@@ -1,3 +1,7 @@
+//Known Bugs:
+// 1. If you modify task and submit another the changes dissapear >
+// 2. Modify button lose event after first action. >
+// 3. afisaza subtaskurile odata cu taksul principal
 const form = document.querySelector('form');
 const lists = document.querySelector('.lists');
 const input = document.querySelector('input');
@@ -21,6 +25,7 @@ class Todo {
   constructor(id, todo) {
     this.id = id;
     this.todo = todo;
+    this.subtask = ['subtask1', 'subtask2']; // afisaza subtaskurile odata cu taksul principal.
   }
 }
 
@@ -29,30 +34,44 @@ function displayData() {
   todoArr.map((item) => {
     const containerTodo = document.createElement('div');
     const todoText = document.createElement('p');
-    todoText.innerText = item.todo;
-    containerTodo.id = item.id;
-    containerTodo.appendChild(todoText);
     const btnDel = document.createElement('button');
+    btnDel.innerText = 'Delete';
+    btnDel.id = 'btnDel' + item.id;
     const btnMod = document.createElement('button');
     btnMod.innerText = 'Modify';
-    btnDel.innerText = 'Delete';
+    btnMod.id = 'btnMod' + item.id;
+    todoText.innerText = item.todo;
+    containerTodo.id = item.id;
+
+    // // Delete Button
+
     btnDel.addEventListener('click', (e) => {
       e.preventDefault();
       todoArr = todoArr.filter((todo) => todo.id !== item.id);
-      let todoDelete = document.getElementById(item.id);
-      todoDelete.remove();
+      displayData();
     });
+
+    // Modify Button
+
     btnMod.addEventListener('click', (e) => {
-      let aux = document.createElement('input');
-      aux.value = todoText.innerText;
-      aux.addEventListener('keypress', (e) => {
+      let inputForMod = document.createElement('input');
+      inputForMod.value = todoText.innerText;
+      todoText.replaceWith(inputForMod);
+      inputForMod.addEventListener('keypress', (e) => {
         if (e.key !== 'Enter') return;
-        let pula = document.createElement('p');
-        pula.innerText = aux.value;
-        aux.replaceWith(pula);
+
+        //modifica valoarea in array
+        todoArr.forEach((element) => {
+          if (element.id === item.id) {
+            element.todo = inputForMod.value;
+            displayData();
+          }
+        });
       });
-      todoText.replaceWith(aux);
     });
+
+    // Adding things to the main container
+    containerTodo.appendChild(todoText);
     containerTodo.appendChild(btnDel);
     containerTodo.appendChild(btnMod);
     lists.appendChild(containerTodo);
