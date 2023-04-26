@@ -1,7 +1,3 @@
-//Known Bugs:
-// 1. If you modify task and submit another the changes dissapear >
-// 2. Modify button lose event after first action. >
-// 3. afisaza subtaskurile odata cu taksul principal
 const form = document.querySelector('form');
 const lists = document.querySelector('.lists');
 const input = document.querySelector('input');
@@ -26,7 +22,7 @@ class Todo {
   constructor(id, todo) {
     this.id = id;
     this.todo = todo;
-    this.subtask = []; // afisaza subtaskurile odata cu taksul principal.
+    this.subtask = [];
   }
 }
 
