@@ -16,6 +16,7 @@ form.addEventListener('submit', (e) => {
   let id = Math.ceil(Math.random() * 1000000);
   const todo = new Todo(id, input.value);
   todoArr = [...todoArr, todo];
+  console.log(todo);
 
   displayData();
   clearInput();
@@ -25,7 +26,7 @@ class Todo {
   constructor(id, todo) {
     this.id = id;
     this.todo = todo;
-    this.subtask = ['subtask1', 'subtask2']; // afisaza subtaskurile odata cu taksul principal.
+    this.subtask = []; // afisaza subtaskurile odata cu taksul principal.
   }
 }
 
@@ -40,8 +41,33 @@ function displayData() {
     const btnMod = document.createElement('button');
     btnMod.innerText = 'Modify';
     btnMod.id = 'btnMod' + item.id;
+    const btnSub = document.createElement('button');
+    btnSub.innerText = 'SubTask';
+    btnSub.id = 'subMod' + item.id;
     todoText.innerText = item.todo;
+
     containerTodo.id = item.id;
+
+    // Sub-Task button
+    btnSub.addEventListener('click', (e) => {
+      const subtaskInput = document.createElement('input');
+      subtaskInput.addEventListener('keypress', (e) => {
+        if (e.key !== 'Enter') return;
+        item.subtask.push(subtaskInput.value);
+        displayData();
+      });
+
+      e.preventDefault();
+
+      containerTodo.appendChild(subtaskInput);
+    });
+
+    const subtaskList = document.createElement('div');
+    item.subtask.forEach((subtask) => {
+      const subtaskItem = document.createElement('p');
+      subtaskItem.innerText = subtask;
+      subtaskList.appendChild(subtaskItem);
+    });
 
     // // Delete Button
 
@@ -72,7 +98,9 @@ function displayData() {
 
     // Adding things to the main container
     containerTodo.appendChild(todoText);
+    containerTodo.appendChild(subtaskList);
     containerTodo.appendChild(btnDel);
+    containerTodo.appendChild(btnSub);
     containerTodo.appendChild(btnMod);
     lists.appendChild(containerTodo);
   });
