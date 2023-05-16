@@ -9,10 +9,12 @@ form.addEventListener('submit', (e) => {
   if (input.value === '') {
     return;
   }
-  let id = Math.ceil(Math.random() * 1000000);
+
+  const todoArrSorted = [...todoArr].sort((a, b) => b?.id - a?.id);
+  const lastItemId = todoArrSorted[0]?.id ?? 0;
+  const id = lastItemId + 1;
   const todo = new Todo(id, input.value);
   todoArr = [...todoArr, todo];
-  console.log(todo);
 
   displayData();
   clearInput();
@@ -23,6 +25,7 @@ class Todo {
     this.id = id;
     this.todo = todo;
     this.subtask = [];
+    this.isDone = false;
   }
 }
 
@@ -31,6 +34,10 @@ function displayData() {
   todoArr.map((item) => {
     const containerTodo = document.createElement('div');
     const todoText = document.createElement('p');
+    const checkBox = document.createElement('input');
+    checkBox.type = 'checkbox';
+    checkBox.className = 'checkbox';
+    checkBox.checked = item.isDone;
     const btnDel = document.createElement('button');
     btnDel.innerText = 'Delete';
     btnDel.id = 'btnDel' + item.id;
@@ -41,12 +48,18 @@ function displayData() {
     btnSub.innerText = 'SubTask';
     btnSub.id = 'subMod' + item.id;
     todoText.innerText = item.todo;
-
+    console.log(todoArr);
     containerTodo.id = item.id;
 
+    //Check-box button
+    checkBox.addEventListener('click', (e) => {
+      item.isDone = !item.isDone;
+      displayData();
+    });
+
     // Sub-Task button
+    const subtaskInput = document.createElement('input');
     btnSub.addEventListener('click', (e) => {
-      const subtaskInput = document.createElement('input');
       subtaskInput.addEventListener('keypress', (e) => {
         if (e.key !== 'Enter') return;
         item.subtask.push(subtaskInput.value);
@@ -93,11 +106,15 @@ function displayData() {
     });
 
     // Adding things to the main container
+    containerTodo.appendChild(checkBox);
     containerTodo.appendChild(todoText);
     containerTodo.appendChild(subtaskList);
-    containerTodo.appendChild(btnDel);
-    containerTodo.appendChild(btnSub);
-    containerTodo.appendChild(btnMod);
+    if (item.isDone === false) {
+      containerTodo.appendChild(btnDel);
+      containerTodo.appendChild(btnSub);
+      containerTodo.appendChild(btnMod);
+    }
+
     lists.appendChild(containerTodo);
   });
 }
